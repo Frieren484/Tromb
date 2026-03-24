@@ -1,6 +1,7 @@
 #include "../include/Directory.h" // тянем заголовок папки
 #include "../include/Exceptions.h" // тянем наши ошибки
 #include "../include/Logger.h" // логгер для записи действий
+#include "../include/File.h" // тянем заголовок файла для доступа к расширениям
 #include <iostream> // для вывода в консоль
 #include <algorithm> // для std::find_if (поиска)
 
@@ -28,7 +29,13 @@ bool Directory::removeResource(const std::string& childName, AccessLevel userLev
     } // конец ифа
 
     auto it = std::find_if(children.begin(), children.end(), // ищем элемент в векторе
-        [&childName](const std::unique_ptr<Resource>& r) { return r->getName() == childName; }); // лямбда-функция: сравниваем имена
+        [&childName](const std::unique_ptr<Resource>& r) { 
+            if (r->getName() == childName) return true; // если имя совпало напрямую (без формата или папка)
+            if (auto f = dynamic_cast<File*>(r.get())) { // если это файл
+                return (f->getName() + "." + f->getExtension() == childName); // проверяем полное совпадение имя.формат
+            }
+            return false; // не нашлось
+        }); // конец лямбды
 
     if (it != children.end()) { // если нашли (итератор не дошел до конца)
         children.erase(it); // удаляем его (unique_ptr сам почистит память, ура)
@@ -45,7 +52,13 @@ std::unique_ptr<Resource> Directory::releaseResource(const std::string& childNam
     } // конец ифа
 
     auto it = std::find_if(children.begin(), children.end(), // ищем
-        [&childName](const std::unique_ptr<Resource>& r) { return r->getName() == childName; }); // по имени
+        [&childName](const std::unique_ptr<Resource>& r) { 
+            if (r->getName() == childName) return true;
+            if (auto f = dynamic_cast<File*>(r.get())) {
+                return (f->getName() + "." + f->getExtension() == childName);
+            }
+            return false;
+        }); // по полному имени
 
     if (it != children.end()) { // если нашли
         std::unique_ptr<Resource> res = std::move(*it); // забираем владение (вытаскиваем из вектора в временную переменную)
