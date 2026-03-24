@@ -46,14 +46,22 @@ int main() { // точка входа в прогу
                 size_t size; // размер файлов
                 std::cout << "Имя: "; std::cin >> name; // читаем имя
                 std::cout << "Расширение: "; std::cin >> ext; // читаем формат
-                std::cout << "Размер (байты): "; std::cin >> size; // читаем сколько весит
-                root->addResource(std::make_unique<File>(name, ext, size)); // создаем уникальный указатель на 파일 и пушим в родителя
+                std::cout << "Размер (байты): "; 
+                if (!(std::cin >> size)) { // читаем сколько весит и проверяем на буквы
+                    std::cin.clear(); std::cin.ignore(10000, '\n'); // чистим мусор
+                    throw FileSystemException("Размер должен быть числом!"); // кидаем ошибку
+                }
+                root->addResource(std::make_unique<File>(name, ext, size)); // создаем уникальный указатель на файл и пушим в родителя
                 std::cout << "Файл успешно создан.\n"; // говорим что всё чиназес
             } else if (choice == 3) { // если 3 (создать папку)
                 std::string name; // имя
                 int level; // права доступа цифрой
                 std::cout << "Имя: "; std::cin >> name; // читаем имя
-                std::cout << "Уровень доступа (0-Гость, 1-Пользователь, 2-Админ): "; std::cin >> level; // читаем уровень
+                std::cout << "Уровень доступа (0-Гость, 1-Пользователь, 2-Админ): ";
+                if (!(std::cin >> level) || level < 0 || level > 2) { // читаем уровень и проверяем корректность
+                    std::cin.clear(); std::cin.ignore(10000, '\n'); // чистим мусор
+                    throw FileSystemException("Уровень доступа должен быть числом от 0 до 2!"); // кидаем ошибку
+                }
                 root->addResource(std::make_unique<Directory>(name, static_cast<AccessLevel>(level))); // создаем уникальную Папку (кастуем число в правильный Enum)
                 std::cout << "Папка успешно создана.\n"; // отчитываемся
             } else if (choice == 4) { // если 4 (аудит)
