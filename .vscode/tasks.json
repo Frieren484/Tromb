@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C/C++: cl.exe build active file",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat\" x64 && cl.exe /Zi /EHsc /nologo /I\"${workspaceFolder}\\include\" /Fe:\"${workspaceFolder}\\main.exe\" \"${workspaceFolder}\\src\\*.cpp\""
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Task generated to mimic Visual Studio build using cl.exe"
+        }
+    ]
+}

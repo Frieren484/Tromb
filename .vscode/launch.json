@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++: cl.exe build and debug active file",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}\\main.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "integratedTerminal",
+      "preLaunchTask": "C/C++: cl.exe build active file"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "console": "externalTerminal",
+      "cwd": "d:/alabuga",
+      "program": "d:/alabuga/build/Debug/outDebug"
+    }
+  ]
+}
